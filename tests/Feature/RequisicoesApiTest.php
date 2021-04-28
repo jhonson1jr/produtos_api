@@ -35,7 +35,12 @@ class MeuPrimeiroTest extends TestCase
     // teste de salvar novo produto
     public function testSalvarProduto()
     {
-        $response = $this->json('POST', '/api/produtos/salvar', ['nome_produto' => 'Uva', 'quantidade' => 10, 'id_produto_tipo' => 1, 'disponivel' => 's']);
+        $response = $this->json('POST', '/api/produtos/salvar', [
+            'nome_produto'    => 'Uva', 
+            'quantidade'      => 10, 
+            'id_produto_tipo' => 1, 
+            'disponivel'      => 's'
+        ]);
 
         $response->assertStatus(201)->assertJsonFragment([
             'nome_produto' => 'Uva', 
@@ -43,21 +48,25 @@ class MeuPrimeiroTest extends TestCase
         ]);
     }
 
-    // Teste de atualização do produto criado (id = 4, ja que temos 3 pré cadastrados com os Seeds)
+    // Teste de atualização do produto criado (id = 5, ja que temos 3 pré cadastrados com os Seeds)
     public function testAtualizarProduto()
     {
-        $response = $this->json('PUT', '/api/produtos/atualizar/4', ['nome_produto' => 'Uva passa', 'quantidade' => 15, 'id_produto_tipo' => 1, 'disponivel' => 'n']);
+        $response = $this->json('PUT', '/api/produtos/atualizar/5', [
+            'nome_produto'    => 'Uva passa', 
+            'quantidade'      => 15, 
+            'id_produto_tipo' => 1, 
+            'disponivel'      => 'n'
+        ]);
 
         $response->assertStatus(200)->assertJsonFragment([
             'nome_produto' => 'Uva passa'
         ]);
     }
 
-    // Teste de remoção do produto de teste (id = 4)
+    // Teste de remoção do produto de teste (id = 5)
     public function testRemoverProdutos()
     {
-        $response = $this->delete('/api/produtos/remover/4');
-
+        $response = $this->json('DELETE', '/api/produtos/remover/5', []);
         $response->assertStatus(200);
     }
 }
