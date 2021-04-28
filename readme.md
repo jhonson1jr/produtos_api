@@ -1,65 +1,76 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+### Laravel com CRUD completo e consumo de API externa
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+### Necessários: Composer, laravel, php 7, mySQL, APIs, PostMan ou Insomnia
 
-## About Laravel
+### Instruções
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+Baixar o projeto
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Dentro do diretório raiz do projeto, abrir o prompt de comando e executar:
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+```
+composer update
+```
 
-## Learning Laravel
+Criar uma base de dados no MySQL e criar um arquivo .env seguindo o .env.example, alterando os dados de conexao a base 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+```
+DB_CONNECTION=mysql
+DB_HOST=<seu host>
+DB_PORT=3306
+DB_DATABASE=<sua database>
+DB_USERNAME=<seu usuário>
+DB_PASSWORD=<sua senha>
+```
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+No prompt, caso seja preciso gerar chave para o projeto, executar:
 
-## Laravel Sponsors
+```
+php artisan key:generate
+```
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+No prompt, executar para montar a base (dentro do arquivo /database/seeds/EstadosSeeder.php consta consumo da api https://servicodados.ibge.gov.br/api/v1/localidades/estados):
+```
+php artisan migrate:refresh --seed
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
+Executado a sequência acima, execute o projeto:
+```
+php artisan serve
+```
 
-## Contributing
+### Rotas e modelos de requisição
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+GET: http://localhost:8000/api/produtos/listar
 
-## Security Vulnerabilities
+GET: http://localhost:8000/api/produtos/detalhes/1
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+POST: http://localhost:8000/api/produtos/salvar
+```
+{
+	"nome_produto":"Arroz",
+	"quantidade":5,
+	"disponivel":"s",
+	"id_produto_tipo":1
+}
+```
 
-## License
+PUT: http://localhost:8000/api/produtos/atualizar/1
+```
+{
+	"nome_produto":"Arroz",
+	"quantidade":15,
+	"disponivel":"s",
+	"id_produto_tipo":1
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+DELETE: http://localhost:8000/api/produtos/remover/1
+
+### Testes
+
+O projeto possui testes de requisição de todas as rotas dispostos em /tests/Feature/RequisicoesApiTest.php
+Para executar, no terminal, digite:
+```
+ ./vendor/bin/phpunit
+ ```
